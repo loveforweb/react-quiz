@@ -7,6 +7,7 @@ const NoteApp = () => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
 
+  // componentDidMount due to empty []
   useEffect(() => {
     const notesData = JSON.parse(localStorage.getItem('notes'));
     if (notesData) {
@@ -14,6 +15,7 @@ const NoteApp = () => {
     }
   }, []);
 
+  // componentDidUpdate when [notes] is updated
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
   }, [notes]);
@@ -34,11 +36,7 @@ const NoteApp = () => {
       <h1>Notes</h1>
 
       {notes.map(note => (
-        <div key={note.title}>
-          <h3>{note.title}</h3>
-          <p>{note.body}</p>
-          <button onClick={() => removeNote(note.title)}>x</button>
-        </div>
+        <Note key={note.title} note={note} removeNote={removeNote} />
       ))}
 
       <p>Add note</p>
@@ -59,48 +57,21 @@ const NoteApp = () => {
   );
 };
 
-const App = props => {
-  const [count, setCount] = useState(props.count);
-  const [text, setText] = useState('');
-
-  // useEffect is componentDidMount and componentDidUpdate
-
-  // runs once only due to empty [] - this is literally componentDidMount
+const Note = ({ note, removeNote }) => {
+  // componentDidUnmout uses a return
   useEffect(() => {
-    console.log('This should only run once');
+    console.log('setting up notes');
+
+    return () => {
+      console.log('cleaning up effect');
+    };
   }, []);
 
-  // runs only when count is updated - this is componentDidUpdate but only for count
-  useEffect(() => {
-    console.log('use effect ran');
-    document.title = count;
-  }, [count]);
-
-  const increment = () => {
-    setCount(count + 1);
-  };
-
-  const decrement = () => {
-    setCount(count - 1);
-  };
-
-  const reset = () => {
-    setCount(props.count);
-  };
-
-  const changeText = e => {
-    setText(e.target.value);
-  };
-
   return (
-    <div>
-      <p>
-        The current {text || 'count'} is {count}
-      </p>
-      <button onClick={increment}>+1</button>
-      <button onClick={decrement}>-1</button>
-      <button onClick={reset}>Reset</button>
-      <input type="text" value={text} onChange={changeText} />
+    <div key={note.title}>
+      <h3>{note.title}</h3>
+      <p>{note.body}</p>
+      <button onClick={() => removeNote(note.title)}>x</button>
     </div>
   );
 };
