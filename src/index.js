@@ -3,14 +3,20 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 
 const NoteApp = () => {
-  const notesData = JSON.parse(localStorage.getItem('notes'));
-  const [notes, setNotes] = useState(notesData || []);
+  const [notes, setNotes] = useState([]);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
 
   useEffect(() => {
+    const notesData = JSON.parse(localStorage.getItem('notes'));
+    if (notesData) {
+      setNotes(notesData);
+    }
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
-  });
+  }, [notes]);
 
   const addNote = e => {
     e.preventDefault();
@@ -53,44 +59,51 @@ const NoteApp = () => {
   );
 };
 
-// const App = props => {
-//   const [count, setCount] = useState(props.count);
-//   const [text, setText] = useState('');
+const App = props => {
+  const [count, setCount] = useState(props.count);
+  const [text, setText] = useState('');
 
-//   // componentDidMount and componentDidUpdate
-//   useEffect(() => {
-//     console.log('use effect ran');
-//     document.title = count;
-//   });
+  // useEffect is componentDidMount and componentDidUpdate
 
-//   const increment = () => {
-//     setCount(count + 1);
-//   };
+  // runs once only due to empty [] - this is literally componentDidMount
+  useEffect(() => {
+    console.log('This should only run once');
+  }, []);
 
-//   const decrement = () => {
-//     setCount(count - 1);
-//   };
+  // runs only when count is updated - this is componentDidUpdate but only for count
+  useEffect(() => {
+    console.log('use effect ran');
+    document.title = count;
+  }, [count]);
 
-//   const reset = () => {
-//     setCount(props.count);
-//   };
+  const increment = () => {
+    setCount(count + 1);
+  };
 
-//   const changeText = e => {
-//     setText(e.target.value);
-//   };
+  const decrement = () => {
+    setCount(count - 1);
+  };
 
-//   return (
-//     <div>
-//       <p>
-//         The current {text || 'count'} is {count}
-//       </p>
-//       <button onClick={increment}>+1</button>
-//       <button onClick={decrement}>-1</button>
-//       <button onClick={reset}>Reset</button>
-//       <input type="text" value={text} onChange={changeText} />
-//     </div>
-//   );
-// };
+  const reset = () => {
+    setCount(props.count);
+  };
+
+  const changeText = e => {
+    setText(e.target.value);
+  };
+
+  return (
+    <div>
+      <p>
+        The current {text || 'count'} is {count}
+      </p>
+      <button onClick={increment}>+1</button>
+      <button onClick={decrement}>-1</button>
+      <button onClick={reset}>Reset</button>
+      <input type="text" value={text} onChange={changeText} />
+    </div>
+  );
+};
 
 ReactDOM.render(<NoteApp />, document.getElementById('root'));
 
