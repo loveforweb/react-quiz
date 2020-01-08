@@ -1,5 +1,22 @@
 import React, { useEffect } from 'react';
 import { useStoreActions, useStoreState } from 'easy-peasy';
+import styled from 'styled-components';
+
+const Option = styled.div`
+    border: 1px solid grey;
+    border-radius: 2px;
+    margin-bottom: 2px;
+`;
+
+const Button = styled.button`
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 4px;
+    background: none;
+    background-color: white;
+    -webkit-appearance: none;
+`;
 
 const Question = ({ questions }) => {
     const { currentQuestion } = useStoreState(state => state);
@@ -29,10 +46,11 @@ const Question = ({ questions }) => {
             {questions.combined_answers.map((answer, i) => {
                 return (
                     <React.Fragment key={i}>
-                        <button onClick={onButtonClick} data-option={i}>
-                            {answer}
-                        </button>
-                        <br />
+                        <Option>
+                            <Button onClick={onButtonClick} data-option={i}>
+                                {answer}
+                            </Button>
+                        </Option>
                     </React.Fragment>
                 );
             })}

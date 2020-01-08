@@ -1,6 +1,11 @@
 import React from 'react';
 import { useStoreState } from 'easy-peasy';
 import Question from './Question';
+import styled from 'styled-components';
+
+const Heading = styled.h2`
+    font-size: 24px;
+`;
 
 const QuestionList = () => {
     const { currentQuestion, quizData } = useStoreState(state => state);
@@ -9,8 +14,8 @@ const QuestionList = () => {
         <div>
             {quizData[currentQuestion] && (
                 <div>
-                    <h2>{quizData[currentQuestion].question}</h2>
-                    <Question questions={quizData[currentQuestion]} />;
+                    <Heading>{quizData[currentQuestion].question}</Heading>
+                    <Question questions={quizData[currentQuestion]} />
                 </div>
             )}
         </div>

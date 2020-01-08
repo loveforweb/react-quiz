@@ -5,12 +5,20 @@ import QuizPage from './pages/QuizPage';
 import * as serviceWorker from './serviceWorker';
 import { StoreProvider, createStore } from 'easy-peasy';
 import model from './model/model';
+import styled from 'styled-components';
+
+const PageWrapper = styled.div`
+    max-width: 1440px;
+    padding: 0 24px;
+`;
 
 const store = createStore(model);
 
 ReactDOM.render(
     <StoreProvider store={store}>
-        <QuizPage />
+        <PageWrapper>
+            <QuizPage />
+        </PageWrapper>
     </StoreProvider>,
     document.getElementById('root')
 );
