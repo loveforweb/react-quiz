@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import QuestionList from '../components/QuestionList';
-import data from '../model/data';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import AnswersList from '../components/AnswersList';
+import QuizBuilder from '../components/QuizBuilder';
 
 const QuizPage = () => {
     const [isComplete, setIsComplete] = useState(false);
-    const [dataSaved, setDataSaved] = useState(false);
     const { currentQuestion, quizData } = useStoreState(state => state);
-    const { updateQuestionCount, resetAnswerResult, setData } = useStoreActions(
-        actions => actions
-    );
+    const {
+        updateQuestionCount,
+        resetAnswerResult,
+        getCategories
+    } = useStoreActions(actions => actions);
 
     const onResetClick = () => {
         setIsComplete(false);
@@ -19,32 +20,21 @@ const QuizPage = () => {
     };
 
     useEffect(() => {
-        if (quizData && currentQuestion === quizData.length) {
-            setIsComplete(true);
-        }
-    }, [currentQuestion, quizData]);
+        getCategories('https://opentdb.com/api_category.php');
+    }, [getCategories]);
 
     useEffect(() => {
-        if (data.results.length) {
-            data.results.map(result => {
-                result.combined_answers = [
-                    result.correct_answer,
-                    ...result.incorrect_answers
-                ].sort(() => Math.random() - 0.5);
-
-                result.is_correct = false;
-                result.selected_answer = null;
-
-                return result;
-            });
-
-            setData(data);
-            setDataSaved(true);
+        if (quizData && currentQuestion === quizData.length) {
+            console.log('is compete');
+            setIsComplete(true);
         }
-    }, [setData]);
+        return () => {
+            setIsComplete(false);
+        };
+    }, [currentQuestion, quizData]);
 
-    if (!dataSaved) {
-        return <div>Loading...</div>;
+    if (!quizData) {
+        return <QuizBuilder />;
     }
 
     if (isComplete) {

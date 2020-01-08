@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import { useStoreActions, useStoreState } from 'easy-peasy';
+import dompurify from 'dompurify';
 import styled from 'styled-components';
+
+const sanitizer = dompurify.sanitize;
 
 const Option = styled.div`
     border: 1px solid grey;
@@ -47,9 +50,13 @@ const Question = ({ questions }) => {
                 return (
                     <React.Fragment key={i}>
                         <Option>
-                            <Button onClick={onButtonClick} data-option={i}>
-                                {answer}
-                            </Button>
+                            <Button
+                                onClick={onButtonClick}
+                                data-option={i}
+                                dangerouslySetInnerHTML={{
+                                    __html: sanitizer(answer)
+                                }}
+                            />
                         </Option>
                     </React.Fragment>
                 );

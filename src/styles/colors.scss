@@ -1,0 +1,12 @@
+@import './variables.scss';
+
+:export {
+    successGreen: $successGreen;
+    errorRed: $errorRed;
+    grey: $grey;
+    white: $white;
+    darkGrey: $darkGrey;
+    lightGrey: $lightGrey;
+    lightBlue: $lightBlue;
+    lightBlueHover: $lightBlueHover;
+}
