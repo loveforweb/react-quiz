@@ -9,10 +9,10 @@ import model from './model/model';
 const store = createStore(model);
 
 ReactDOM.render(
-  <StoreProvider store={store}>
-    <QuizPage />
-  </StoreProvider>,
-  document.getElementById('root')
+    <StoreProvider store={store}>
+        <QuizPage />
+    </StoreProvider>,
+    document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

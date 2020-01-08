@@ -1,31 +1,41 @@
+import { action, debug } from 'easy-peasy';
+
 const model = {
-  results: [
-    {
-      category: 'Science: Computers',
-      type: 'multiple',
-      difficulty: 'easy',
-      question: 'On Twitter, what is the character limit for a Tweet?',
-      correct_answer: '140',
-      incorrect_answers: ['120', '160', '100']
-    },
-    {
-      category: 'Science: Computers',
-      type: 'multiple',
-      difficulty: 'medium',
-      question: 'The name of technology company HP stands for what?',
-      correct_answer: 'Hewlett-Packard',
-      incorrect_answers: ['Howard Packmann', 'Husker-Pollosk', 'Hellman-Pohl']
-    },
-    {
-      category: 'Mythology',
-      type: 'multiple',
-      difficulty: 'easy',
-      question:
-        'What mytological creatures have women&#039;s faces and vultures&#039; bodies?',
-      correct_answer: 'Harpies',
-      incorrect_answers: ['Mermaids', 'Nymph', 'Lilith']
-    }
-  ]
+    currentQuestion: 0,
+    answerCount: 0,
+    quizData: null,
+    setData: action((state, data) => {
+        state.quizData = data.results;
+    }),
+
+    updateQuestionCount: action((state, count) => {
+        state.currentQuestion = count;
+    }),
+
+    updateQuizData: action((state, payload) => {
+        state.quizData[payload.index] = {
+            ...state.quizData[payload.index],
+            ...payload
+        };
+    }),
+
+    resetAnswerResult: action(state => {
+        const newState = [];
+        state.quizData.map(questions => {
+            const updatedObj = {
+                ...questions,
+                is_correct: false,
+                selected_answer: null
+            };
+
+            delete updatedObj.index;
+            delete updatedObj.option;
+
+            return newState.push(updatedObj);
+        });
+
+        state.quizData = newState;
+    })
 };
 
 export { model as default };

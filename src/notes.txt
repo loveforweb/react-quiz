@@ -1,0 +1,19 @@
+// ComponentDidMount - no dependencies
+useEffect(() => {
+    console.log('This will run on mount and update')
+}, []);
+
+
+// ComponentDidUpdate - will "watch" count and update
+useEffect(() => {
+    console.log('This will run whenever the "count" state is changed')
+}, [count]);
+
+// ComponentDidUnmount - uses a return
+useEffect(() => {
+    console.log('This will run once)
+
+    return () => {
+        console.log('componentDidUnmount')
+    }
+}, []);
