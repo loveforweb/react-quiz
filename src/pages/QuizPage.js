@@ -6,7 +6,9 @@ import QuizBuilder from '../components/QuizBuilder';
 
 const QuizPage = () => {
     const [isComplete, setIsComplete] = useState(false);
-    const { currentQuestion, quizData } = useStoreState(state => state);
+    const { questionIndex, quizData, totalQuestions } = useStoreState(
+        state => state
+    );
     const {
         updateQuestionCount,
         resetAnswerResult,
@@ -24,14 +26,12 @@ const QuizPage = () => {
     }, [getCategories]);
 
     useEffect(() => {
-        if (quizData && currentQuestion === quizData.length) {
-            console.log('is compete');
+        if (quizData && questionIndex === totalQuestions) {
             setIsComplete(true);
-        }
-        return () => {
+        } else {
             setIsComplete(false);
-        };
-    }, [currentQuestion, quizData]);
+        }
+    }, [questionIndex, quizData, totalQuestions]);
 
     if (!quizData) {
         return <QuizBuilder />;

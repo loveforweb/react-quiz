@@ -11,22 +11,27 @@ const Heading = styled.h2`
 `;
 
 const QuestionList = () => {
-    const { currentQuestion, quizData } = useStoreState(state => state);
+    const { questionIndex, quizData, totalQuestions } = useStoreState(
+        state => state
+    );
 
     return (
         <div>
-            {quizData[currentQuestion] && (
+            <p>
+                Question {questionIndex + 1} / {totalQuestions}
+            </p>
+            {quizData[questionIndex] && (
                 <div>
                     <Heading>
                         <span
                             dangerouslySetInnerHTML={{
                                 __html: sanitizer(
-                                    quizData[currentQuestion].question
+                                    quizData[questionIndex].question
                                 )
                             }}
                         />
                     </Heading>
-                    <Question questions={quizData[currentQuestion]} />
+                    <Question questions={quizData[questionIndex]} />
                 </div>
             )}
         </div>

@@ -18,15 +18,17 @@ const QuizWrapper = styled.div`
 
 const QuizBuilder = () => {
     const { quizCategories } = useStoreState(state => state);
-    const { getQuestions } = useStoreActions(actions => actions);
+    const { getQuestions, setTotalQuestion } = useStoreActions(
+        actions => actions
+    );
     const [category, setCategory] = useState();
-    const [amount, setAmount] = useState(3);
+    const [amount, setAmount] = useState(1);
     const [type, setType] = useState('multiple');
     const [difficulty, setDifficulty] = useState('easy');
 
     useEffect(() => {
         return () => {
-            console.log('cleanup');
+            console.log('cleanup QuizBuilder');
         };
     }, []);
 
@@ -36,6 +38,8 @@ const QuizBuilder = () => {
         if (category) {
             urlParams = { ...urlParams, category };
         }
+
+        setTotalQuestion(amount);
         if (urlParams) {
             getQuestions(queryString.stringify(urlParams));
         } else {
@@ -45,7 +49,7 @@ const QuizBuilder = () => {
 
     const handleChange = e => {
         if (e.target.name === 'amount') {
-            setAmount(e.target.value);
+            setAmount(+e.target.value);
         }
 
         if (e.target.name === 'category') {

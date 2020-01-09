@@ -22,24 +22,24 @@ const Button = styled.button`
 `;
 
 const Question = ({ questions }) => {
-    const { currentQuestion } = useStoreState(state => state);
+    const { questionIndex } = useStoreState(state => state);
     const { updateQuestionCount, updateQuizData } = useStoreActions(
         actions => actions
     );
 
     useEffect(() => {
         return () => {
-            console.log('clean up');
+            console.log('clean up Question');
         };
     }, []);
 
     const onButtonClick = e => {
-        updateQuestionCount(currentQuestion + 1);
+        updateQuestionCount(questionIndex + 1);
         updateQuizData({
             is_correct:
                 e.target.innerHTML === questions.correct_answer ? true : false,
             selected_answer: e.target.innerHTML,
-            index: currentQuestion,
+            index: questionIndex,
             option: e.target.getAttribute('data-option')
         });
     };

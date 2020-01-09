@@ -3,7 +3,7 @@ import { useStoreState } from 'easy-peasy';
 import Answers from './Answers';
 
 const AnswersList = () => {
-    const { quizData } = useStoreState(state => state);
+    const { quizData, totalQuestions } = useStoreState(state => state);
     const [answerCount, setAnswerCount] = useState(0);
 
     useEffect(() => {
@@ -16,7 +16,9 @@ const AnswersList = () => {
 
     return (
         <div>
-            <p>Complete {answerCount}</p>
+            <p>
+                You answered {answerCount} out of {totalQuestions} correctly
+            </p>
             {quizData.map((questionData, i) => {
                 return (
                     <Answers

@@ -1,8 +1,8 @@
 import { action, debug, thunk } from 'easy-peasy';
 
 const model = {
-    currentQuestion: 0,
-    answerCount: 0,
+    questionIndex: 0,
+    totalQuestions: null,
     quizData: null,
     quizCategories: [],
 
@@ -14,8 +14,12 @@ const model = {
         state.quizCategories = payload;
     }),
 
+    setTotalQuestion: action((state, payload) => {
+        state.totalQuestions = payload;
+    }),
+
     updateQuestionCount: action((state, count) => {
-        state.currentQuestion = count;
+        state.questionIndex = count;
     }),
 
     updateQuizData: action((state, payload) => {
@@ -26,7 +30,8 @@ const model = {
     }),
 
     resetAnswerResult: action(state => {
-        state.quizData = [];
+        state.quizData = null;
+        state.totalQuestions = null;
     }),
 
     getCategories: thunk(async (actions, url) => {

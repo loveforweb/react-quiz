@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import dompurify from 'dompurify';
 import colors from '../styles/colors.scss';
@@ -40,6 +40,11 @@ const AnswerItem = styled.div`
 `;
 
 const Answers = ({ question, combinedAns, correctAns, selectedAns }) => {
+    useEffect(() => {
+        return () => {
+            console.log('cleanup Answers');
+        };
+    }, []);
     return (
         <AnswerContainer>
             <Heading>
@@ -63,7 +68,6 @@ const Answers = ({ question, combinedAns, correctAns, selectedAns }) => {
                     }
                 }
 
-                console.log(item);
                 return (
                     <AnswerItem
                         key={i}
