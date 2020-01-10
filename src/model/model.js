@@ -18,7 +18,7 @@ const model = {
         state.totalQuestions = payload;
     }),
 
-    updateQuestionCount: action((state, count) => {
+    updateQuestionIndex: action((state, count) => {
         state.questionIndex = count;
     }),
 
@@ -46,27 +46,36 @@ const model = {
                 return 0;
             });
         };
-        const response = await fetch(url);
-        const categories = await response.json();
 
-        actions.setCategories(sortItems(categories.trivia_categories));
+        try {
+            const response = await fetch(url);
+            const categories = await response.json();
+
+            return actions.setCategories(
+                sortItems(categories.trivia_categories)
+            );
+        } catch (error) {}
     }),
 
     getQuestions: thunk(async (actions, params) => {
-        const response = await fetch(`https://opentdb.com/api.php?${params}`);
-        const questions = await response.json();
+        try {
+            const response = await fetch(
+                `https://opentdb.com/api.php?${params}`
+            );
+            const questions = await response.json();
 
-        const quizData = questions.results.map(result => {
-            result.combined_answers = [
-                result.correct_answer,
-                ...result.incorrect_answers
-            ].sort(() => Math.random() - 0.5);
-            result.is_correct = false;
-            result.selected_answer = null;
-            return result;
-        });
+            const quizData = questions.results.map(result => {
+                result.combined_answers = [
+                    result.correct_answer,
+                    ...result.incorrect_answers
+                ].sort(() => Math.random() - 0.5);
+                result.is_correct = false;
+                result.selected_answer = null;
+                return result;
+            });
 
-        actions.setQuizData(quizData);
+            return actions.setQuizData(quizData);
+        } catch (error) {}
     })
 };
 

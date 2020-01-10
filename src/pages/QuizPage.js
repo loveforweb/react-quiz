@@ -10,14 +10,14 @@ const QuizPage = () => {
         state => state
     );
     const {
-        updateQuestionCount,
+        updateQuestionIndex,
         resetAnswerResult,
         getCategories
     } = useStoreActions(actions => actions);
 
     const onResetClick = () => {
         setIsComplete(false);
-        updateQuestionCount(0);
+        updateQuestionIndex(0);
         resetAnswerResult();
     };
 

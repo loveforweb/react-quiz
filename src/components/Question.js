@@ -23,7 +23,7 @@ const Button = styled.button`
 
 const Question = ({ questions }) => {
     const { questionIndex } = useStoreState(state => state);
-    const { updateQuestionCount, updateQuizData } = useStoreActions(
+    const { updateQuestionIndex, updateQuizData } = useStoreActions(
         actions => actions
     );
 
@@ -34,7 +34,7 @@ const Question = ({ questions }) => {
     }, []);
 
     const onButtonClick = e => {
-        updateQuestionCount(questionIndex + 1);
+        updateQuestionIndex(questionIndex + 1);
         updateQuizData({
             is_correct:
                 e.target.innerHTML === questions.correct_answer ? true : false,
