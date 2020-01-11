@@ -5,15 +5,12 @@ import queryString from 'query-string';
 import { difficultyOptions, typeOptions } from '../auxiliary/default-options';
 import SelectOption from './FormElements/SelectOption';
 import InputField from './FormElements/InputField';
+import Button from './FormElements/Button';
+import breakpoint from '../styles/breakpoints.scss';
 
 const QuizWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    button {
-        display: flex;
-        margin-left: 16rem;
-        justify-content: center;
-    }
 `;
 
 const QuizBuilder = () => {
@@ -22,7 +19,7 @@ const QuizBuilder = () => {
         actions => actions
     );
     const [category, setCategory] = useState();
-    const [amount, setAmount] = useState(1);
+    const [amount, setAmount] = useState(10);
     const [type, setType] = useState('multiple');
     const [difficulty, setDifficulty] = useState('easy');
 
@@ -100,9 +97,11 @@ const QuizBuilder = () => {
                 handleChange={handleChange}
                 label="Number of questions"
             />
-            <button onClick={handleGetQuestions} className="button">
-                Generate Questions
-            </button>
+            <Button
+                onClickAction={handleGetQuestions}
+                text="Generate Questions"
+                isGenerate={true}
+            />
         </QuizWrapper>
     );
 };

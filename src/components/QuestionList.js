@@ -3,26 +3,24 @@ import { useStoreState } from 'easy-peasy';
 import Question from './Question';
 import dompurify from 'dompurify';
 import styled from 'styled-components';
+import QuizProgress from './QuizProgress';
 
 const sanitizer = dompurify.sanitize;
 
-const Heading = styled.h2`
+const QuestionHeading = styled.h2`
     font-size: 24px;
+    line-height: 1.5;
 `;
 
 const QuestionList = () => {
-    const { questionIndex, quizData, totalQuestions } = useStoreState(
-        state => state
-    );
+    const { questionIndex, quizData } = useStoreState(state => state);
 
     return (
-        <div>
-            <p>
-                Question {questionIndex + 1} / {totalQuestions}
-            </p>
+        <>
+            <QuizProgress timeLimit={10} />
             {quizData[questionIndex] && (
                 <div>
-                    <Heading>
+                    <QuestionHeading>
                         <span
                             dangerouslySetInnerHTML={{
                                 __html: sanitizer(
@@ -30,11 +28,11 @@ const QuestionList = () => {
                                 )
                             }}
                         />
-                    </Heading>
+                    </QuestionHeading>
                     <Question questions={quizData[questionIndex]} />
                 </div>
             )}
-        </div>
+        </>
     );
 };
 

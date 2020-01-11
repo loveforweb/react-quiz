@@ -1,4 +1,7 @@
 import { action, debug, thunk } from 'easy-peasy';
+import { questions, categories } from './data';
+
+const local = true;
 
 const model = {
     questionIndex: 0,
@@ -47,24 +50,23 @@ const model = {
             });
         };
 
-        try {
-            const response = await fetch(url);
-            const categories = await response.json();
-
+        if (local) {
             return actions.setCategories(
                 sortItems(categories.trivia_categories)
             );
-        } catch (error) {}
+        } else {
+            try {
+                const response = await fetch(url);
+                const categories = await response.json();
+
+                actions.setCategories(sortItems(categories.trivia_categories));
+            } catch (error) {}
+        }
     }),
 
     getQuestions: thunk(async (actions, params) => {
-        try {
-            const response = await fetch(
-                `https://opentdb.com/api.php?${params}`
-            );
-            const questions = await response.json();
-
-            const quizData = questions.results.map(result => {
+        const setparams = questions => {
+            return questions.results.map(result => {
                 result.combined_answers = [
                     result.correct_answer,
                     ...result.incorrect_answers
@@ -73,9 +75,20 @@ const model = {
                 result.selected_answer = null;
                 return result;
             });
+        };
 
-            return actions.setQuizData(quizData);
-        } catch (error) {}
+        if (local) {
+            return actions.setQuizData(setparams(questions));
+        } else {
+            try {
+                const response = await fetch(
+                    `https://opentdb.com/api.php?${params}`
+                );
+                const questions = await response.json();
+
+                actions.setQuizData(setparams(questions));
+            } catch (error) {}
+        }
     })
 };
 

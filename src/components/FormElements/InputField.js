@@ -1,16 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
+import breakpoint from '../../styles/breakpoints.scss';
 
 const QuizItem = styled.div`
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     margin-bottom: 1rem;
+
+    @media ${breakpoint.tablet} {
+        flex-direction: row;
+    }
+
     label {
         margin-right: 1rem;
-        margin-bottom: 0;
+        margin-bottom: 6px;
         min-width: 15rem;
         display: flex;
         align-items: center;
+
+        @media ${breakpoint.tablet} {
+            margin-bottom: 0;
+        }
     }
 `;
 
