@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useStoreState, useStoreActions } from 'easy-peasy';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import colors from '../styles/colors.scss';
 
 const Span = styled.span`
@@ -20,12 +20,19 @@ const TimerBar = styled.div`
         content: '';
         display: block;
         height: 100%;
-        width: ${props => props.timer || 0}%;
+        width: 0;
         background: linear-gradient(
             90deg,
             rgba(${colors.progressStart}, 1) 0%,
             rgba(${colors.progressEnd}, 1) 100%
         );
+
+        ${props =>
+            props.start === 'true' &&
+            css`
+                transition: width ${props => props.duration || 0}s linear;
+                width: 100%;
+            `}
     }
 `;
 
@@ -43,35 +50,36 @@ const Wrapper = styled.div`
 `;
 
 const QuizProgress = ({ timeLimit }) => {
+    const timeLimitAdj = timeLimit + 1;
     const { questionIndex, totalQuestions } = useStoreState(state => state);
     const { updateQuestionIndex } = useStoreActions(actions => actions);
-    const [timeLeft, setTimeLeft] = useState(1);
-    const [perc, setPerc] = useState(0);
+    const [seconds, setSeconds] = useState(timeLimitAdj);
+    const [isActive, setIsActive] = useState('false');
 
     useEffect(() => {
-        console.log(timeLeft);
-        if (timeLeft - 2 === timeLimit) {
-            console.log('reset');
-            setTimeLeft(1);
-            updateQuestionIndex(questionIndex + 1);
-            return;
-        }
-
         const timer = setTimeout(() => {
-            setTimeLeft(timeLeft + 1);
-            setPerc(timeLeft * 10);
+            setIsActive('true');
+            setSeconds(seconds - 1);
         }, 1000);
+
+        console.log(seconds);
+
+        if (seconds === 0) {
+            updateQuestionIndex(questionIndex + 1);
+            clearTimeout(timer);
+            setSeconds(timeLimitAdj);
+            setIsActive('false');
+        }
 
         return () => {
             clearTimeout(timer);
         };
-    }, [timeLeft, timeLimit, questionIndex, updateQuestionIndex]);
+    }, [questionIndex, seconds, timeLimit, updateQuestionIndex, timeLimitAdj]);
 
     return (
         <Wrapper>
-            {/* <Span>Question {questionIndex + 1}</Span> / {totalQuestions} */}
-            <TimerBar timer={perc} />
-            <Span>Question 10</Span> / 1
+            <TimerBar start={isActive} duration={timeLimit} />
+            <Span>Question {questionIndex + 1}</Span> / {totalQuestions}
         </Wrapper>
     );
 };

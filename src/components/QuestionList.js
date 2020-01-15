@@ -3,7 +3,6 @@ import { useStoreState } from 'easy-peasy';
 import Question from './Question';
 import dompurify from 'dompurify';
 import styled from 'styled-components';
-import QuizProgress from './QuizProgress';
 
 const sanitizer = dompurify.sanitize;
 
@@ -17,7 +16,6 @@ const QuestionList = () => {
 
     return (
         <>
-            <QuizProgress timeLimit={10} />
             {quizData[questionIndex] && (
                 <div>
                     <QuestionHeading>

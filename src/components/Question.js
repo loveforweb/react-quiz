@@ -5,6 +5,7 @@ import uuid from 'uuid/v4';
 import colors from '../styles/colors.scss';
 import RadioOption from './FormElements/RadioOption';
 import Button from './FormElements/Button';
+import QuizProgress from './QuizProgress';
 
 const Option = styled.div`
     border: 4px solid ${colors.kashmirBlue};
@@ -53,6 +54,8 @@ const Question = ({ questions }) => {
     return (
         <div>
             {/* create id so radio options are one group  */}
+
+            <QuizProgress timeLimit={10} />
             {questions.combined_answers.map((answer, i) => {
                 return (
                     <React.Fragment key={i}>
