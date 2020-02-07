@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useStoreState } from 'easy-peasy';
 import Question from './Question';
 import dompurify from 'dompurify';
 import styled from 'styled-components';
+import QuizProgress from './QuizProgress';
 
 const sanitizer = dompurify.sanitize;
 
@@ -14,10 +15,26 @@ const QuestionHeading = styled.h2`
 const QuestionList = () => {
     const { questionIndex, quizData } = useStoreState(state => state);
 
+    const [timeValue, setTimeValue] = useState(10);
+    const timeLimit = 10;
+
+    const clearTimer = () => {
+        setTimeValue(0);
+    };
+
+    const resetTimer = () => {
+        setTimeValue(timeLimit);
+    };
+
     return (
         <>
             {quizData[questionIndex] && (
                 <div>
+                    <QuizProgress
+                        timeLimit={timeLimit}
+                        timeValue={timeValue}
+                        resetTimer={resetTimer}
+                    />
                     <QuestionHeading>
                         <span
                             dangerouslySetInnerHTML={{
@@ -27,7 +44,10 @@ const QuestionList = () => {
                             }}
                         />
                     </QuestionHeading>
-                    <Question questions={quizData[questionIndex]} />
+                    <Question
+                        questions={quizData[questionIndex]}
+                        clearTimer={clearTimer}
+                    />
                 </div>
             )}
         </>

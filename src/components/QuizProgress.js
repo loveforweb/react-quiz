@@ -7,6 +7,13 @@ const Span = styled.span`
     font-size: 24px;
     font-weight: 500;
     display: block;
+    margin-right: 5px;
+`;
+
+const QuestionState = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 `;
 
 const TimerBar = styled.div`
@@ -49,7 +56,7 @@ const Wrapper = styled.div`
     padding-bottom: 18px;
 `;
 
-const QuizProgress = ({ timeLimit }) => {
+const QuizProgress = ({ timeLimit, timeValue, resetTimer }) => {
     const timeLimitAdj = timeLimit + 1;
     const { questionIndex, totalQuestions } = useStoreState(state => state);
     const { updateQuestionIndex } = useStoreActions(actions => actions);
@@ -62,24 +69,35 @@ const QuizProgress = ({ timeLimit }) => {
             setSeconds(seconds - 1);
         }, 1000);
 
-        console.log(seconds);
-
-        if (seconds === 0) {
-            updateQuestionIndex(questionIndex + 1);
+        if (timeValue === 0 || seconds === 0) {
+            if (seconds === 0) {
+                updateQuestionIndex(questionIndex + 1);
+            }
             clearTimeout(timer);
             setSeconds(timeLimitAdj);
             setIsActive('false');
+            resetTimer();
         }
 
         return () => {
             clearTimeout(timer);
         };
-    }, [questionIndex, seconds, timeLimit, updateQuestionIndex, timeLimitAdj]);
+    }, [
+        questionIndex,
+        seconds,
+        timeLimit,
+        updateQuestionIndex,
+        timeLimitAdj,
+        resetTimer,
+        timeValue
+    ]);
 
     return (
         <Wrapper>
             <TimerBar start={isActive} duration={timeLimit} />
-            <Span>Question {questionIndex + 1}</Span> / {totalQuestions}
+            <QuestionState>
+                <Span>Question {questionIndex + 1}</Span> / {totalQuestions}
+            </QuestionState>
         </Wrapper>
     );
 };
